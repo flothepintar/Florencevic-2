@@ -27,7 +27,7 @@ export function DigitalCore({ particleCount = 600, reducedMotion = false }: Core
     const pos = new Float32Array(particleCount * 3)
     const sz = new Float32Array(particleCount)
     for (let i = 0; i < particleCount; i++) {
-      const r = 1.9 + Math.random() * 1.4
+      const r = 1.9 + Math.random() * 2.5
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
       pos[i * 3] = r * Math.sin(phi) * Math.cos(theta)
@@ -39,7 +39,7 @@ export function DigitalCore({ particleCount = 600, reducedMotion = false }: Core
   }, [particleCount])
 
   useFrame((state, delta) => {
-    const t = state.clock.getElapsedTime()
+    const t = state.clock.elapsedTime
 
     // Smoothly track pointer (normalized -1..1 from R3F state).
     pointer.current.x += (state.pointer.x - pointer.current.x) * 0.04
@@ -73,9 +73,9 @@ export function DigitalCore({ particleCount = 600, reducedMotion = false }: Core
       <mesh ref={inner}>
         <icosahedronGeometry args={[1.05, 12]} />
         <MeshDistortMaterial
-          color="#0b1220"
-          emissive="#0891b2"
-          emissiveIntensity={0.25}
+          color="#06120e"
+          emissive="#84cc16"
+          emissiveIntensity={0.32}
           roughness={0.15}
           metalness={0.95}
           distort={reducedMotion ? 0.1 : 0.32}
@@ -86,7 +86,7 @@ export function DigitalCore({ particleCount = 600, reducedMotion = false }: Core
       {/* Faceted glass shell */}
       <Icosahedron args={[1.7, 1]}>
         <meshPhysicalMaterial
-          color="#0e1526"
+          color="#071711"
           transmission={0.9}
           thickness={1.2}
           roughness={0.08}
@@ -101,8 +101,22 @@ export function DigitalCore({ particleCount = 600, reducedMotion = false }: Core
 
       {/* Wireframe outline for structure */}
       <Icosahedron args={[1.72, 1]}>
-        <meshBasicMaterial color="#22d3ee" wireframe transparent opacity={0.08} />
+        <meshBasicMaterial color="#b7ff4a" wireframe transparent opacity={0.1} />
       </Icosahedron>
+
+      {/* Thin orbital traces create the site's original FP signal motif. */}
+      <mesh rotation={[Math.PI / 2, 0.3, 0.25]}>
+        <torusGeometry args={[2.05, 0.012, 8, 180]} />
+        <meshBasicMaterial color="#d9ffcb" transparent opacity={0.42} />
+      </mesh>
+      <mesh rotation={[0.55, Math.PI / 2, -0.48]}>
+        <torusGeometry args={[2.3, 0.009, 8, 180]} />
+        <meshBasicMaterial color="#70e8ff" transparent opacity={0.3} />
+      </mesh>
+      <mesh rotation={[-0.65, 0.2, Math.PI / 2]}>
+        <torusGeometry args={[2.65, 0.006, 8, 180]} />
+        <meshBasicMaterial color="#b7ff4a" transparent opacity={0.18} />
+      </mesh>
 
       {/* Drifting data particles */}
       <points ref={points}>
@@ -111,10 +125,10 @@ export function DigitalCore({ particleCount = 600, reducedMotion = false }: Core
           <bufferAttribute attach="attributes-size" args={[sizes, 1]} />
         </bufferGeometry>
         <pointsMaterial
-          size={0.03}
-          color="#67e8f9"
+          size={0.028}
+          color="#b7ff4a"
           transparent
-          opacity={0.7}
+          opacity={0.72}
           sizeAttenuation
           depthWrite={false}
           blending={THREE.AdditiveBlending}

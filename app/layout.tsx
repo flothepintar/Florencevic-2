@@ -44,18 +44,27 @@ export const metadata: Metadata = {
     description:
       'I build software that does the work. Full-stack applications, automation systems, AI workflows, and digital tools that solve real-world business problems.',
     siteName: 'Florencevic Pondaag',
+    images: [
+      {
+        url: '/og.png',
+        width: 1536,
+        height: 1024,
+        alt: 'Florencevic Pondaag — Systems, Automation, AI, and Commerce',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Florencevic Pondaag — Technology & E-Commerce Manager',
     description:
       'I build software that does the work. Automation · AI · E-Commerce · Business Systems · Mobile.',
+    images: ['/og.png'],
   },
 }
 
 export const viewport: Viewport = {
   colorScheme: 'dark',
-  themeColor: '#0a0d12',
+  themeColor: '#030807',
   width: 'device-width',
   initialScale: 1,
 }

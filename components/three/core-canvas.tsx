@@ -68,7 +68,7 @@ export function CoreCanvas({ className, interactive = true }: CoreCanvasProps) {
     )
   }
 
-  const particleCount = isMobile ? 220 : 600
+  const particleCount = isMobile ? 320 : 1100
 
   return (
     <div className={className}>
@@ -79,10 +79,10 @@ export function CoreCanvas({ className, interactive = true }: CoreCanvasProps) {
         frameloop={reducedMotion ? 'demand' : 'always'}
         style={{ pointerEvents: interactive ? 'auto' : 'none' }}
       >
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[5, 5, 5]} intensity={1.2} color="#e0f7ff" />
-        <pointLight position={[-6, -2, -4]} intensity={2} color="#22d3ee" />
-        <pointLight position={[4, 3, 2]} intensity={1} color="#ffffff" />
+        <ambientLight intensity={0.28} />
+        <directionalLight position={[5, 5, 5]} intensity={1.1} color="#ddfff0" />
+        <pointLight position={[-6, -2, -4]} intensity={2.4} color="#b7ff4a" />
+        <pointLight position={[4, 3, 2]} intensity={1.4} color="#70e8ff" />
 
         <Suspense fallback={null}>
           <DigitalCore particleCount={particleCount} reducedMotion={reducedMotion} />
@@ -91,19 +91,19 @@ export function CoreCanvas({ className, interactive = true }: CoreCanvasProps) {
               intensity={2}
               position={[0, 3, 2]}
               scale={[6, 3, 1]}
-              color="#22d3ee"
+              color="#b7ff4a"
             />
             <Lightformer
               intensity={1.2}
               position={[-3, -2, -2]}
               scale={[4, 4, 1]}
-              color="#ffffff"
+              color="#dcfff0"
             />
             <Lightformer
               intensity={0.8}
               position={[3, -1, 3]}
               scale={[3, 3, 1]}
-              color="#7dd3fc"
+              color="#70e8ff"
             />
           </Environment>
         </Suspense>
