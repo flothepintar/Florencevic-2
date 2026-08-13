@@ -331,4 +331,74 @@ export const systemArchive: SystemArchiveItem[] = [
     capabilities: ['Sales summaries', 'SKU Pareto', 'Regional analysis', 'PDF reporting'],
     technologies: ['Node.js', 'Analytics', 'PDF Generation', 'REST APIs'],
   },
+  {
+    id: 'social-listing-network',
+    code: 'SOC-01',
+    name: 'SOCIAL MARKETPLACE LISTING NETWORK',
+    group: 'SOCIAL COMMERCE',
+    summary:
+      'Transforms central catalog data into repeatable social marketplace listing and maintenance workflows.',
+    capabilities: ['Daily listing queue', 'Catalog mapping', 'Media preparation', 'Operator controls'],
+    technologies: ['Browser Automation', 'Node.js', 'Structured Data', 'Persistent Sessions'],
+  },
+  {
+    id: 'shipping-document-engine',
+    code: 'FUL-05',
+    name: 'MULTI-CHANNEL SHIPPING DOCUMENT ENGINE',
+    group: 'FULFILLMENT INFRASTRUCTURE',
+    summary:
+      'Normalizes invoice, airway-bill, and print-media workflows across multiple commerce channels.',
+    capabilities: ['Document detection', 'Print rendering', 'PDF output', 'Batch preparation'],
+    technologies: ['Node.js', 'Browser Automation', 'PDF', 'Session Management'],
+  },
+  {
+    id: 'consent-outreach',
+    code: 'COM-05',
+    name: 'CONSENT-AWARE OUTREACH PIPELINE',
+    group: 'CUSTOMER ENGAGEMENT',
+    summary:
+      'Coordinates reviewed outreach lists, consent state, delivery records, and controlled follow-up activity.',
+    capabilities: ['Lead preparation', 'Consent state', 'Delivery records', 'Follow-up controls'],
+    technologies: ['Python', 'Structured Data', 'Messaging Workflows', 'Audit Logs'],
+  },
+  {
+    id: 'expense-sync-service',
+    code: 'DAT-02',
+    name: 'EXPENSE SYNCHRONIZATION SERVICE',
+    group: 'DATA SERVICES',
+    summary:
+      'Keeps personal finance records portable and synchronized across local web and mobile surfaces.',
+    capabilities: ['Local API', 'Device synchronization', 'Portable backups', 'Network access'],
+    technologies: ['Node.js', 'REST APIs', 'Local Network', 'JSON'],
+  },
+  {
+    id: 'mobile-finance-companion',
+    code: 'MOB-03',
+    name: 'MOBILE FINANCE COMPANION',
+    group: 'ANDROID APPLICATION',
+    summary:
+      'Brings daily expense capture, budgeting, savings goals, and financial signals into a focused mobile workflow.',
+    capabilities: ['Expense capture', 'Budget tracking', 'Savings goals', 'Sync support'],
+    technologies: ['Android', 'Java', 'REST APIs', 'Local Storage'],
+  },
+  {
+    id: 'commerce-storefront',
+    code: 'WEB-01',
+    name: 'COMMERCE STOREFRONT EXPERIENCE',
+    group: 'WEB EXPERIENCE',
+    summary:
+      'A focused product-facing web experience designed to translate store operations into a clear digital surface.',
+    capabilities: ['Responsive storefront', 'Product presentation', 'Interaction design', 'Static deployment'],
+    technologies: ['HTML', 'CSS', 'JavaScript', 'Responsive Web'],
+  },
+  {
+    id: 'product-research-agent',
+    code: 'CAT-06',
+    name: 'PRODUCT RESEARCH INGESTION AGENT',
+    group: 'CATALOG INTELLIGENCE',
+    summary:
+      'Collects public product information and media into structured, reviewable records for downstream catalog work.',
+    capabilities: ['Public page extraction', 'Content cleanup', 'Media capture', 'Structured output'],
+    technologies: ['Node.js', 'Browser Automation', 'DOM Parsing', 'Image Handling'],
+  },
 ]
