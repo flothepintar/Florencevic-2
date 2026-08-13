@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useRef } from 'react'
-import { Float, RoundedBox, Sparkles, useTexture } from '@react-three/drei'
+import { Float, Line, RoundedBox, Sparkles } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { systemArchive } from '@/data/system-archive'
@@ -359,48 +359,186 @@ function WorldSpine() {
   )
 }
 
-function ProjectWorlds() {
-  const baseTexture = useTexture('/portfolio-world-v2.png')
-  const textures = useMemo(
-    () =>
-      CARD_Y.map((_, index) => {
-        const texture = baseTexture.clone()
-        texture.colorSpace = THREE.SRGBColorSpace
-        texture.wrapS = THREE.RepeatWrapping
-        texture.wrapT = THREE.RepeatWrapping
-        texture.repeat.set(0.42, 0.55)
-        texture.offset.set((index % 3) * 0.27, index < 3 ? 0.36 : 0.02)
-        texture.needsUpdate = true
-        return texture
-      }),
-    [baseTexture],
-  )
+function CommerceNetwork({ color, compact }: { color: string; compact: boolean }) {
+  const nodes: Point3[] = [
+    [-1.75, 0.88, 0.38],
+    [-1.45, -0.95, 0.3],
+    [0, 1.15, 0.45],
+    [1.52, 0.72, 0.28],
+    [1.72, -0.86, 0.4],
+  ]
 
+  return (
+    <group position={[0, 0, 0.22]}>
+      <mesh rotation={[0.3, 0.5, 0.12]}>
+        <dodecahedronGeometry args={[0.68, compact ? 0 : 1]} />
+        <meshPhysicalMaterial color="#061217" emissive={color} emissiveIntensity={0.72} metalness={0.82} roughness={0.14} />
+      </mesh>
+      <mesh scale={1.28} rotation={[0.3, 0.5, 0.12]}>
+        <dodecahedronGeometry args={[0.68, 0]} />
+        <meshBasicMaterial color={color} wireframe transparent opacity={0.38} />
+      </mesh>
+      {nodes.map((node, index) => (
+        <group key={index}>
+          <Line points={[[0, 0, 0], node]} color={color} lineWidth={0.7} transparent opacity={0.46} />
+          <mesh position={[...node]}>
+            <octahedronGeometry args={[0.19 + (index % 2) * 0.05, 0]} />
+            <meshStandardMaterial color={color} emissive={color} emissiveIntensity={1.1} />
+          </mesh>
+        </group>
+      ))}
+    </group>
+  )
+}
+
+function FulfillmentPipeline({ color }: { color: string }) {
+  const nodes = [-2.05, -1.23, -0.41, 0.41, 1.23, 2.05]
+
+  return (
+    <group position={[0, 0, 0.24]}>
+      <Line points={nodes.map((x, index) => [x, Math.sin(index * 1.1) * 0.32, 0] as Point3)} color={color} lineWidth={1.25} transparent opacity={0.7} />
+      {nodes.map((x, index) => {
+        const y = Math.sin(index * 1.1) * 0.32
+        return (
+          <group key={x} position={[x, y, 0]}>
+            <RoundedBox args={[0.48, 0.48, 0.36]} radius={0.08} smoothness={3}>
+              <meshPhysicalMaterial color="#080b16" emissive={color} emissiveIntensity={index === 5 ? 0.9 : 0.34} metalness={0.68} roughness={0.2} />
+            </RoundedBox>
+            <mesh position={[0, -0.52, 0]}>
+              <planeGeometry args={[0.35, 0.025]} />
+              <meshBasicMaterial color={color} transparent opacity={0.3 + index * 0.1} />
+            </mesh>
+          </group>
+        )
+      })}
+      <mesh position={[2.05, Math.sin(5.5) * 0.32, -0.02]} scale={1.65}>
+        <ringGeometry args={[0.3, 0.33, 32]} />
+        <meshBasicMaterial color={color} transparent opacity={0.36} side={THREE.DoubleSide} />
+      </mesh>
+    </group>
+  )
+}
+
+function WarehouseSync({ color }: { color: string }) {
+  const warehouses = [-1.55, 0, 1.55]
+
+  return (
+    <group position={[0, -0.08, 0.22]}>
+      {warehouses.map((x, index) => (
+        <group key={x} position={[x, 0, 0]}>
+          <RoundedBox args={[1.08, 1.25 + index * 0.18, 0.78]} radius={0.07} smoothness={3}>
+            <meshPhysicalMaterial color="#071008" emissive={color} emissiveIntensity={0.18 + index * 0.12} metalness={0.74} roughness={0.22} wireframe />
+          </RoundedBox>
+          {[-0.34, 0, 0.34].map((row) => (
+            <mesh key={row} position={[0, row, 0.42]}>
+              <planeGeometry args={[0.7, 0.04]} />
+              <meshBasicMaterial color={color} transparent opacity={0.36} />
+            </mesh>
+          ))}
+          <mesh position={[0, 1.02 + index * 0.09, 0]}>
+            <octahedronGeometry args={[0.15, 0]} />
+            <meshStandardMaterial color={color} emissive={color} emissiveIntensity={1.2} />
+          </mesh>
+        </group>
+      ))}
+      <Line points={[[-1.55, 1.02, 0], [0, 1.65, 0.08], [1.55, 1.2, 0]]} color={color} lineWidth={0.8} transparent opacity={0.58} />
+      <mesh position={[0, 1.65, 0.08]}>
+        <sphereGeometry args={[0.11, 12, 12]} />
+        <meshBasicMaterial color="#efffd7" />
+      </mesh>
+    </group>
+  )
+}
+
+function InboundLedger({ color }: { color: string }) {
+  return (
+    <group position={[0, 0, 0.24]} rotation={[0.08, -0.12, 0]}>
+      {Array.from({ length: 4 }).map((_, index) => (
+        <group key={index} position={[0, (1.5 - index) * 0.48, index * -0.08]}>
+          <RoundedBox args={[3.65 - index * 0.18, 0.32, 0.11]} radius={0.06} smoothness={2}>
+            <meshPhysicalMaterial color="#13070c" emissive={color} emissiveIntensity={0.12 + index * 0.1} metalness={0.72} roughness={0.2} />
+          </RoundedBox>
+          <mesh position={[-1.35, 0, 0.08]}>
+            <circleGeometry args={[0.07, 12]} />
+            <meshBasicMaterial color={color} />
+          </mesh>
+          <mesh position={[0.48, 0, 0.08]}>
+            <planeGeometry args={[1.75 - index * 0.2, 0.035]} />
+            <meshBasicMaterial color={color} transparent opacity={0.42} />
+          </mesh>
+        </group>
+      ))}
+      <mesh position={[1.72, 0.12, 0.18]} rotation={[0, 0, Math.PI / 4]}>
+        <octahedronGeometry args={[0.38, 0]} />
+        <meshPhysicalMaterial color="#210610" emissive={color} emissiveIntensity={0.82} metalness={0.6} roughness={0.16} />
+      </mesh>
+    </group>
+  )
+}
+
+function NegativeStockGuard({ color, compact }: { color: string; compact: boolean }) {
+  const scanLines = [-1.15, -0.58, 0, 0.58, 1.15]
+
+  return (
+    <group position={[0, 0, 0.25]}>
+      <mesh rotation={[0.2, 0.42, 0]}>
+        <icosahedronGeometry args={[0.88, compact ? 1 : 2]} />
+        <meshPhysicalMaterial color="#061016" emissive={color} emissiveIntensity={0.6} metalness={0.82} roughness={0.13} clearcoat={1} />
+      </mesh>
+      <mesh scale={1.22} rotation={[0.2, 0.42, 0]}>
+        <icosahedronGeometry args={[0.88, 1]} />
+        <meshBasicMaterial color={color} wireframe transparent opacity={0.3} />
+      </mesh>
+      {scanLines.map((y, index) => (
+        <mesh key={y} position={[0, y, 0.8]}>
+          <planeGeometry args={[4.3 - Math.abs(index - 2) * 0.45, 0.025]} />
+          <meshBasicMaterial color={color} transparent opacity={0.18 + index * 0.08} />
+        </mesh>
+      ))}
+      <mesh position={[0, 0, 1]}>
+        <ringGeometry args={[1.35, 1.39, compact ? 40 : 72]} />
+        <meshBasicMaterial color={color} transparent opacity={0.55} side={THREE.DoubleSide} />
+      </mesh>
+    </group>
+  )
+}
+
+function ProjectVisual({ index, color, compact }: { index: number; color: string; compact: boolean }) {
+  if (index === 0) return <CommerceNetwork color={color} compact={compact} />
+  if (index === 1) return <FulfillmentPipeline color={color} />
+  if (index === 2) return <WarehouseSync color={color} />
+  if (index === 3) return <InboundLedger color={color} />
+  return <NegativeStockGuard color={color} compact={compact} />
+}
+
+function ProjectWorlds({ compact }: { compact: boolean }) {
   return CARD_Y.map((y, index) => (
-    <group key={y} position={[CARD_X[index], y, 0]} rotation={[0.03, index % 2 ? -0.16 : 0.16, 0]}>
+    <group key={y} position={[CARD_X[index], y, 0]} rotation={[0.03, index % 2 ? -0.13 : 0.13, 0]}>
       <Float speed={0.65 + index * 0.06} rotationIntensity={0.08} floatIntensity={0.18}>
-        <RoundedBox args={[5.7, 3.4, 0.12]} radius={0.2} smoothness={5}>
+        <RoundedBox args={[5.7, 3.4, 0.12]} radius={0.2} smoothness={4}>
           <meshPhysicalMaterial
-            map={textures[index]}
-            color="#cbd9df"
-            metalness={0.2}
-            roughness={0.28}
-            clearcoat={0.8}
-            clearcoatRoughness={0.18}
+            color="#03080b"
             emissive={CARD_COLORS[index]}
-            emissiveIntensity={0.05}
+            emissiveIntensity={0.035}
+            metalness={0.62}
+            roughness={0.24}
+            clearcoat={0.9}
+            clearcoatRoughness={0.18}
+            transparent
+            opacity={0.86}
           />
         </RoundedBox>
-        <RoundedBox args={[6.1, 3.8, 0.05]} radius={0.24} smoothness={5} position={[0, 0, -0.24]}>
+        <ProjectVisual index={index} color={CARD_COLORS[index]} compact={compact} />
+        <RoundedBox args={[6.1, 3.8, 0.05]} radius={0.24} smoothness={4} position={[0, 0, -0.24]}>
           <meshBasicMaterial color={CARD_COLORS[index]} wireframe transparent opacity={0.16} />
         </RoundedBox>
       </Float>
       <mesh position={[index % 2 ? -3.8 : 3.8, 0, -1]} rotation={[1.1, 0.2, index]}>
-        <torusGeometry args={[1.6, 0.025, 8, 120]} />
-        <meshBasicMaterial color={CARD_COLORS[index]} transparent opacity={0.28} />
+        <torusGeometry args={[1.6, 0.025, 8, compact ? 70 : 120]} />
+        <meshBasicMaterial color={CARD_COLORS[index]} transparent opacity={0.24} />
       </mesh>
-      <Sparkles count={150} scale={[9, 6, 5]} size={1.4} speed={0.16} color={CARD_COLORS[index]} />
-      <pointLight position={[index % 2 ? 3 : -3, 1, 2]} color={CARD_COLORS[index]} intensity={7} distance={10} />
+      <Sparkles count={compact ? 55 : 105} scale={[9, 6, 5]} size={1.15} speed={0.12} color={CARD_COLORS[index]} />
+      <pointLight position={[index % 2 ? 3 : -3, 1, 2]} color={CARD_COLORS[index]} intensity={5} distance={9} />
     </group>
   ))
 }
@@ -475,7 +613,7 @@ export function PortfolioWorld({ reducedMotion = false }: { reducedMotion?: bool
     <group ref={world} scale={isCompact ? 0.82 : 1}>
       <OperationalCore compact={isCompact} reducedMotion={reducedMotion} progress={smooth} />
       <WorldSpine />
-      <ProjectWorlds />
+      <ProjectWorlds compact={isCompact} />
       <ArchiveConstellation />
       <DataDust count={isCompact ? 1100 : 2400} />
       <ambientLight intensity={0.32} />

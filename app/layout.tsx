@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     siteName: 'Florencevic Pondaag',
     images: [
       {
-        url: '/og.png',
+        url: '/og-operational-systems.png',
         width: 1536,
         height: 1024,
         alt: 'Florencevic Pondaag — Systems, Automation, AI, and Commerce',
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     title: 'Florencevic Pondaag — Technology & E-Commerce Manager',
     description:
       'I build software that does the work. Automation · AI · E-Commerce · Business Systems · Mobile.',
-    images: ['/og.png'],
+    images: ['/og-operational-systems.png'],
   },
 }
 

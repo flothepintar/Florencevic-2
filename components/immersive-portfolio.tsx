@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ArrowDown, ArrowUpRight } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, X } from 'lucide-react'
 import { LazyPortfolioWorld } from '@/components/three/lazy-portfolio-world'
 import { experience } from '@/data/experience'
+import { featuredCaseStudyById } from '@/data/featured-case-studies'
 import { site } from '@/data/site'
 import { systemArchive } from '@/data/system-archive'
 
@@ -25,7 +26,14 @@ export function ImmersivePortfolio() {
   const [activeScene, setActiveScene] = useState('origin')
   const [loadProgress, setLoadProgress] = useState(0)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
+  const caseStudyCloseRef = useRef<HTMLButtonElement>(null)
+  const caseStudyTriggerRef = useRef<HTMLButtonElement>(null)
   const activeIndex = Math.max(0, chapters.findIndex((chapter) => chapter.id === activeScene))
+  const selectedProject = featuredProjects.find((project) => project.id === selectedProjectId)
+  const selectedCaseStudy = selectedProjectId
+    ? featuredCaseStudyById.get(selectedProjectId)
+    : undefined
 
   const archiveGroups = useMemo(() => {
     const groups = new Map<string, typeof systemArchive>()
@@ -49,6 +57,26 @@ export function ImmersivePortfolio() {
     }, 48)
     return () => window.clearInterval(timer)
   }, [])
+
+  useEffect(() => {
+    if (!selectedProjectId) return
+
+    const previousOverflow = document.body.style.overflow
+    const focusFrame = window.requestAnimationFrame(() => caseStudyCloseRef.current?.focus())
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSelectedProjectId(null)
+    }
+
+    document.body.style.overflow = 'hidden'
+    document.addEventListener('keydown', closeOnEscape)
+
+    return () => {
+      window.cancelAnimationFrame(focusFrame)
+      document.body.style.overflow = previousOverflow
+      document.removeEventListener('keydown', closeOnEscape)
+      caseStudyTriggerRef.current?.focus()
+    }
+  }, [selectedProjectId])
 
   useEffect(() => {
     const sections = chapters
@@ -160,6 +188,14 @@ export function ImmersivePortfolio() {
               <span>Pondaag</span>
             </h1>
           </div>
+          <div className="origin-actions" aria-label="Portfolio actions">
+            <a href="#omni-channel-manager">
+              Explore selected system <ArrowDown aria-hidden="true" />
+            </a>
+            <a href="#contact">
+              Discuss an operation <ArrowUpRight aria-hidden="true" />
+            </a>
+          </div>
           <a className="journey-scroll" href="#practice">
             <span>Scroll to travel</span>
             <ArrowDown aria-hidden="true" />
@@ -197,6 +233,16 @@ export function ImmersivePortfolio() {
                   <span key={technology}>{technology}</span>
                 ))}
               </div>
+              <button
+                className="project-explore"
+                type="button"
+                onClick={(event) => {
+                  caseStudyTriggerRef.current = event.currentTarget
+                  setSelectedProjectId(project.id)
+                }}
+              >
+                Explore selected system <ArrowUpRight aria-hidden="true" />
+              </button>
             </div>
           </section>
         ))}
@@ -265,6 +311,100 @@ export function ImmersivePortfolio() {
           </footer>
         </section>
       </main>
+
+      {selectedProject && selectedCaseStudy ? (
+        <div
+          className="case-study-layer"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setSelectedProjectId(null)
+          }}
+        >
+          <article
+            className="case-study-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={`case-study-title-${selectedProject.id}`}
+            onKeyDown={(event) => {
+              if (event.key !== 'Tab') return
+
+              const focusable = Array.from(
+                event.currentTarget.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'),
+              )
+              const first = focusable[0]
+              const last = focusable.at(-1)
+
+              if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault()
+                last?.focus()
+              } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault()
+                first?.focus()
+              }
+            }}
+          >
+            <header>
+              <div>
+                <span>{selectedProject.code} / System detail</span>
+                <h2 id={`case-study-title-${selectedProject.id}`}>{selectedProject.name}</h2>
+              </div>
+              <button
+                ref={caseStudyCloseRef}
+                type="button"
+                aria-label="Close system detail"
+                onClick={() => setSelectedProjectId(null)}
+              >
+                <X aria-hidden="true" />
+              </button>
+            </header>
+
+            <div className="case-study-metrics" aria-label="Verified system indicators">
+              {selectedCaseStudy.metrics.map((metric) => (
+                <div key={metric.label}>
+                  <strong>{metric.value}</strong>
+                  <span>{metric.label}</span>
+                  <small>{metric.context}</small>
+                </div>
+              ))}
+            </div>
+
+            <div className="case-study-grid">
+              <section>
+                <span>01 / Problem</span>
+                <p>{selectedCaseStudy.challenge}</p>
+              </section>
+              <section>
+                <span>02 / Solution</span>
+                <p>{selectedCaseStudy.solution}</p>
+              </section>
+              <section>
+                <span>03 / My role</span>
+                <p>{selectedCaseStudy.role}</p>
+              </section>
+              <section className="case-study-architecture">
+                <span>04 / Architecture</span>
+                <ol>
+                  {selectedCaseStudy.architecture.map((step) => (
+                    <li key={step}>{step}</li>
+                  ))}
+                </ol>
+              </section>
+              <section className="case-study-impact">
+                <span>05 / Impact</span>
+                <p>{selectedCaseStudy.impact}</p>
+              </section>
+            </div>
+
+            <footer>
+              <small>
+                Indicators describe verified configuration and system scope, not private production volume.
+              </small>
+              <a href="#contact" onClick={() => setSelectedProjectId(null)}>
+                Discuss an operation <ArrowUpRight aria-hidden="true" />
+              </a>
+            </footer>
+          </article>
+        </div>
+      ) : null}
     </div>
   )
 }
