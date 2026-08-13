@@ -1521,6 +1521,9 @@ body:has(.journey-shell) {
 }
 
 .journey-shell {
+  --origin-art-opacity: 1;
+  --origin-art-scale: 1;
+  --origin-art-shift: 0px;
   position: relative;
   min-height: 100vh;
   overflow: clip;
@@ -1630,7 +1633,6 @@ body:has(.journey-shell) {
   mask-image: radial-gradient(circle, black, transparent 72%);
 }
 
-.lite-origin-core,
 .lite-project,
 .lite-constellation {
   position: absolute;
@@ -1639,64 +1641,6 @@ body:has(.journey-shell) {
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.9);
   transition: opacity 500ms ease, transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.journey-shell[data-active-scene='origin'] .lite-origin-core,
-.journey-shell[data-active-scene='practice'] .lite-origin-core {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.lite-origin-core {
-  display: grid;
-  width: min(34rem, 62vw);
-  aspect-ratio: 1;
-  place-items: center;
-  border: 1px solid rgba(121, 245, 239, 0.32);
-  border-radius: 50%;
-  box-shadow: 0 0 8rem rgba(121, 245, 239, 0.12), inset 0 0 5rem rgba(159, 131, 255, 0.1);
-}
-
-.lite-origin-core::before,
-.lite-origin-core::after,
-.lite-origin-core i {
-  position: absolute;
-  border: 1px solid rgba(183, 255, 74, 0.3);
-  border-radius: 50%;
-  content: '';
-}
-
-.lite-origin-core::before {
-  inset: 14%;
-  transform: rotate(24deg) scaleY(0.56);
-}
-
-.lite-origin-core::after {
-  inset: 25%;
-  border-color: rgba(159, 131, 255, 0.52);
-  transform: rotate(-38deg) scaleX(0.62);
-}
-
-.lite-origin-core i:first-child {
-  inset: 37%;
-  border-radius: 28% 72% 60% 40%;
-  background: rgba(5, 28, 28, 0.88);
-  box-shadow: 0 0 3rem rgba(121, 245, 239, 0.35);
-  transform: rotate(32deg);
-}
-
-.lite-origin-core i:nth-child(2) {
-  inset: 45%;
-  background: var(--world-lime);
-  box-shadow: 0 0 2rem var(--world-lime);
-}
-
-.lite-origin-core span {
-  z-index: 1;
-  color: #effff9;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: clamp(1.2rem, 3vw, 2.4rem);
-  letter-spacing: 0.18em;
 }
 
 .lite-project {
@@ -2165,36 +2109,63 @@ body:has(.journey-shell) {
   left: 50%;
   width: min(76vw, 78rem);
   aspect-ratio: 2 / 1;
+  opacity: var(--origin-art-opacity);
   pointer-events: none;
-  transform: translateX(-50%);
+  transform: translate3d(-50%, var(--origin-art-shift), 0) scale(var(--origin-art-scale));
+  transform-origin: 50% 35%;
+  transition: opacity 90ms linear;
+  will-change: opacity, transform;
 }
 
 .origin-universe-media {
   position: absolute;
   overflow: hidden;
   inset: 0;
-  border: 1px solid rgba(121, 245, 239, 0.12);
-  border-radius: clamp(1rem, 2vw, 2rem);
-  background: #020506;
-  box-shadow: 0 0 8rem rgba(121, 245, 239, 0.08), inset 0 0 4rem rgba(0, 0, 0, 0.48);
-  mask-image: radial-gradient(ellipse 78% 74% at 50% 48%, black 48%, rgba(0, 0, 0, 0.8) 72%, transparent 100%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 56% 56% at 50% 46%,
+    black 36%,
+    rgba(0, 0, 0, 0.88) 54%,
+    rgba(0, 0, 0, 0.2) 82%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 56% 56% at 50% 46%,
+    black 36%,
+    rgba(0, 0, 0, 0.88) 54%,
+    rgba(0, 0, 0, 0.2) 82%,
+    transparent 100%
+  );
 }
 
+.origin-universe-media::before,
 .origin-universe-media::after {
   position: absolute;
   inset: 0;
   content: '';
-  background:
-    linear-gradient(180deg, rgba(2, 5, 6, 0.16), transparent 16%, transparent 72%, #020506 100%),
-    radial-gradient(ellipse at center, transparent 45%, rgba(2, 5, 6, 0.28) 78%, #020506 110%);
   pointer-events: none;
+}
+
+.origin-universe-media::before {
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(2, 5, 6, 0.82), rgba(2, 5, 6, 0.64) 46%, transparent 76%),
+    radial-gradient(circle at 35% 45%, rgba(183, 255, 74, 0.07), transparent 25%),
+    radial-gradient(circle at 66% 48%, rgba(121, 245, 239, 0.08), transparent 30%),
+    radial-gradient(ellipse at 50% 52%, rgba(7, 31, 30, 0.28), transparent 58%);
+  filter: blur(24px);
+}
+
+.origin-universe-media::after {
+  background:
+    linear-gradient(180deg, rgba(2, 5, 6, 0.52), transparent 20%, transparent 66%, rgba(2, 5, 6, 0.72) 92%, #020506 100%),
+    radial-gradient(ellipse at center, transparent 42%, rgba(2, 5, 6, 0.15) 68%, rgba(2, 5, 6, 0.66) 100%);
 }
 
 .origin-universe-media img {
   object-fit: cover;
   object-position: center top;
-  opacity: 0.82;
-  filter: saturate(0.9) contrast(1.08) brightness(0.86);
+  opacity: 0.9;
+  filter: saturate(0.92) contrast(1.09) brightness(0.92);
+  mix-blend-mode: screen;
 }
 
 .origin-universe-instruction {
@@ -3144,8 +3115,8 @@ body:has(.journey-shell) {
   }
 
   .origin-universe-media {
-    border-radius: 1rem;
-    mask-image: radial-gradient(ellipse 80% 75% at 50% 48%, black 52%, rgba(0, 0, 0, 0.82) 74%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 47%, black 40%, rgba(0, 0, 0, 0.86) 57%, rgba(0, 0, 0, 0.18) 84%, transparent 100%);
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 47%, black 40%, rgba(0, 0, 0, 0.86) 57%, rgba(0, 0, 0, 0.18) 84%, transparent 100%);
   }
 
   .origin-universe-media img {
@@ -3236,7 +3207,6 @@ body:has(.journey-shell) {
     justify-content: space-between;
   }
 
-  .lite-origin-core,
   .lite-project,
   .lite-constellation {
     width: 86vw;

@@ -12,11 +12,6 @@ export function PortfolioWorldFallback() {
   return (
     <div className="lite-world" aria-hidden="true" data-renderer="css">
       <div className="lite-grid" />
-      <div className="lite-origin-core">
-        <i />
-        <i />
-        <span>FP</span>
-      </div>
 
       {projectScenes.map((scene, index) => (
         <div

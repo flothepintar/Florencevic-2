@@ -611,7 +611,6 @@ export function PortfolioWorld({ reducedMotion = false }: { reducedMotion?: bool
 
   return (
     <group ref={world} scale={isCompact ? 0.82 : 1}>
-      <OperationalCore compact={isCompact} reducedMotion={reducedMotion} progress={smooth} />
       <WorldSpine />
       <ProjectWorlds compact={isCompact} />
       <ArchiveConstellation />

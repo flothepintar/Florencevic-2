@@ -110,7 +110,15 @@ export function ImmersivePortfolio() {
     const update = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight
       const progress = max > 0 ? window.scrollY / max : 0
-      rootRef.current?.style.setProperty('--journey-progress', `${progress}`)
+      const compactViewport = window.innerWidth <= 640
+      const exitDistance = window.innerHeight * (compactViewport ? 0.55 : 0.78)
+      const originExit = Math.min(1, window.scrollY / Math.max(1, exitDistance))
+      const root = rootRef.current
+
+      root?.style.setProperty('--journey-progress', `${progress}`)
+      root?.style.setProperty('--origin-art-opacity', `${Math.max(0, 1 - originExit * 1.08)}`)
+      root?.style.setProperty('--origin-art-shift', `${originExit * (compactViewport ? -96 : -72)}px`)
+      root?.style.setProperty('--origin-art-scale', `${1 - originExit * 0.045}`)
     }
     update()
     window.addEventListener('scroll', update, { passive: true })
