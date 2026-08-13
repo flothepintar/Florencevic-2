@@ -7,11 +7,7 @@ export interface ExperienceItem {
 }
 
 export const experience: ExperienceItem[] = [
-  { year: '2018', role: 'Sales Promotion Boy', company: 'PT Tas Centre Cemerlang' },
-  { year: '2019', role: 'Waitress & Housekeeping', company: 'Corallica Dive Resort' },
-  { year: '2020', role: 'Sales Advisor', company: 'Samsonite Indonesia' },
-  { year: '2022', role: 'Store Leader', company: 'PT Doran Sukses Indonesia' },
-  { year: '2026', role: 'Store Manager', company: 'thepintar.com' },
+  { year: '2026', role: 'Store Manager and Full Stack Developer', company: 'ThePintar' },
 ]
 
 export const exploring: string[] = [

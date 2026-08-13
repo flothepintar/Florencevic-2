@@ -1374,7 +1374,13 @@ body:has(.experience-shell) {
 
   .hero-copy h1 {
     gap: 0.55rem;
-    font-size: 17vw;
+    width: 100%;
+    font-size: clamp(2.5rem, 14.25vw, 4.75rem);
+  }
+
+  .hero-copy h1 span {
+    max-width: 100%;
+    white-space: nowrap;
   }
 
   .hero-copy h1 span:last-child {
