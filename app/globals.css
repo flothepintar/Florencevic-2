@@ -1788,6 +1788,13 @@ body:has(.journey-shell) {
   gap: 0.45rem;
   font-family: var(--font-geist-mono), monospace;
   pointer-events: none;
+  transition: opacity 320ms ease, visibility 320ms ease;
+}
+
+.journey-shell:not([data-active-scene='origin']):not([data-active-scene='practice'])
+  .system-selector {
+  visibility: hidden;
+  opacity: 0;
 }
 
 .system-selector p {
@@ -1938,13 +1945,40 @@ body:has(.journey-shell) {
 }
 
 .scene-copy {
+  --scene-accent: var(--world-cyan);
   position: relative;
+  isolation: isolate;
   width: min(31rem, 42vw);
-  padding: 1.35rem 1.4rem 1.45rem;
-  border-top: 1px solid rgba(209, 255, 242, 0.32);
-  background: linear-gradient(135deg, rgba(2, 7, 9, 0.76), rgba(5, 5, 12, 0.22));
-  box-shadow: 0 1.5rem 5rem rgba(0, 0, 0, 0.18);
-  backdrop-filter: blur(13px) saturate(120%);
+  padding: 1.35rem 0 1.45rem;
+}
+
+.scene-copy::before {
+  position: absolute;
+  z-index: -1;
+  inset: -4rem -5rem;
+  content: '';
+  background:
+    radial-gradient(
+      ellipse at 29% 50%,
+      rgba(1, 7, 9, 0.93) 0%,
+      rgba(2, 7, 10, 0.72) 34%,
+      rgba(3, 6, 10, 0.34) 57%,
+      transparent 77%
+    ),
+    radial-gradient(circle at 30% 50%, color-mix(in srgb, var(--scene-accent) 12%, transparent), transparent 52%);
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+.scene-copy::after {
+  position: absolute;
+  top: 0;
+  height: 1px;
+  content: '';
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--scene-accent) 78%, white), transparent);
+  box-shadow: 0 0 1.1rem color-mix(in srgb, var(--scene-accent) 55%, transparent);
+  opacity: 0.72;
+  pointer-events: none;
 }
 
 .scene-copy-left {
@@ -1952,16 +1986,58 @@ body:has(.journey-shell) {
   margin-left: 7vw;
 }
 
+.scene-copy-left::after {
+  right: -8vw;
+  left: 0;
+}
+
 .scene-copy-right {
   margin-right: 4vw;
   margin-left: auto;
+}
+
+.scene-copy-right::before {
+  background:
+    radial-gradient(
+      ellipse at 71% 50%,
+      rgba(1, 7, 9, 0.93) 0%,
+      rgba(2, 7, 10, 0.72) 34%,
+      rgba(3, 6, 10, 0.34) 57%,
+      transparent 77%
+    ),
+    radial-gradient(circle at 70% 50%, color-mix(in srgb, var(--scene-accent) 12%, transparent), transparent 52%);
+}
+
+.scene-copy-right::after {
+  right: 0;
+  left: -8vw;
+}
+
+.project-1 .scene-copy {
+  --scene-accent: #75f4da;
+}
+
+.project-2 .scene-copy {
+  --scene-accent: #a58aff;
+}
+
+.project-3 .scene-copy {
+  --scene-accent: #b7ff4a;
+}
+
+.project-4 .scene-copy {
+  --scene-accent: #ff708f;
+}
+
+.project-5 .scene-copy {
+  --scene-accent: #66d7ff;
 }
 
 .scene-kicker,
 .scene-copy > small {
   display: block;
   margin-bottom: 0.8rem;
-  color: var(--world-cyan);
+  color: var(--scene-accent, var(--world-cyan));
   font-size: 0.56rem;
   letter-spacing: 0.17em;
 }
@@ -2000,6 +2076,11 @@ body:has(.journey-shell) {
   letter-spacing: 0.16em;
 }
 
+.project-signal span:first-child {
+  color: var(--scene-accent);
+  text-shadow: 0 0 1rem color-mix(in srgb, var(--scene-accent) 48%, transparent);
+}
+
 .journey-project .scene-copy h2 {
   font-size: clamp(2.3rem, 4.3vw, 5.1rem);
 }
@@ -2013,7 +2094,7 @@ body:has(.journey-shell) {
 
 .project-tech span {
   padding: 0.35rem 0.55rem;
-  border: 1px solid rgba(201, 255, 239, 0.17);
+  border: 1px solid color-mix(in srgb, var(--scene-accent) 24%, transparent);
   border-radius: 999px;
   color: rgba(225, 255, 247, 0.56);
   font-family: var(--font-geist-mono), monospace;
@@ -2023,6 +2104,9 @@ body:has(.journey-shell) {
 }
 
 .journey-archive {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   min-height: 200svh;
   align-items: flex-start;
   gap: 4rem;
@@ -2030,8 +2114,21 @@ body:has(.journey-shell) {
   background: linear-gradient(180deg, transparent, rgba(4, 1, 12, 0.42) 20%, rgba(1, 5, 7, 0.68) 82%, transparent);
 }
 
+.journey-archive::before {
+  position: absolute;
+  z-index: 0;
+  inset: 7% 0 5%;
+  content: '';
+  background:
+    radial-gradient(ellipse at 18% 27%, rgba(1, 7, 9, 0.82), rgba(1, 6, 9, 0.25) 43%, transparent 68%),
+    linear-gradient(90deg, rgba(1, 5, 8, 0.58), rgba(4, 2, 12, 0.12) 48%, rgba(2, 5, 9, 0.42));
+  mask-image: linear-gradient(180deg, transparent, black 10%, black 90%, transparent);
+  pointer-events: none;
+}
+
 .archive-intro {
   position: sticky;
+  z-index: 1;
   top: 18vh;
   width: 34%;
 }
@@ -2042,6 +2139,8 @@ body:has(.journey-shell) {
 }
 
 .constellation-list {
+  position: relative;
+  z-index: 1;
   display: grid;
   width: 60%;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2314,12 +2413,6 @@ body:has(.journey-shell) {
     display: none;
   }
 
-  .journey-shell:not([data-active-scene='origin']):not([data-active-scene='practice'])
-    .system-selector {
-    visibility: hidden;
-    opacity: 0;
-  }
-
   .journey-scene {
     min-height: 110svh;
     padding: 6rem 1.25rem 5rem;
@@ -2372,8 +2465,21 @@ body:has(.journey-shell) {
     width: 100%;
     margin: 0;
     padding: 1rem 0 1.15rem;
-    background: linear-gradient(180deg, rgba(1, 5, 7, 0.1), rgba(1, 5, 7, 0.78));
-    backdrop-filter: blur(8px);
+  }
+
+  .scene-copy::before,
+  .scene-copy-right::before {
+    inset: -2.5rem -1.2rem;
+    background:
+      linear-gradient(180deg, transparent, rgba(1, 5, 7, 0.78) 30%, rgba(1, 5, 7, 0.92) 72%, transparent),
+      radial-gradient(ellipse at 50% 56%, color-mix(in srgb, var(--scene-accent) 11%, transparent), transparent 66%);
+    filter: blur(8px);
+  }
+
+  .scene-copy-left::after,
+  .scene-copy-right::after {
+    right: 0;
+    left: 0;
   }
 
   .scene-copy h2,

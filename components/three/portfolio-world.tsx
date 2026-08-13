@@ -216,17 +216,24 @@ export function PortfolioWorld({ reducedMotion = false }: { reducedMotion?: bool
   const smooth = useRef(0)
   const isCompact = viewport.width < 5.5
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     const documentHeight = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
     const target = Math.min(1, window.scrollY / documentHeight)
-    smooth.current += (target - smooth.current) * (reducedMotion ? 1 : 0.055)
+    smooth.current = reducedMotion
+      ? target
+      : THREE.MathUtils.damp(smooth.current, target, 6.5, delta)
     const travel = smooth.current * 58
     const pointerX = reducedMotion ? 0 : pointer.x * (isCompact ? 0.18 : 0.42)
     const pointerY = reducedMotion ? 0 : pointer.y * 0.18
 
-    camera.position.x += (pointerX - camera.position.x) * 0.045
-    camera.position.y += (-travel + pointerY - camera.position.y) * 0.075
-    camera.position.z += ((isCompact ? 8.7 : 7.2) - camera.position.z) * 0.06
+    camera.position.x = THREE.MathUtils.damp(camera.position.x, pointerX, 4.2, delta)
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, -travel + pointerY, 8, delta)
+    camera.position.z = THREE.MathUtils.damp(
+      camera.position.z,
+      isCompact ? 8.7 : 7.2,
+      5.2,
+      delta,
+    )
     camera.lookAt(camera.position.x * 0.12, camera.position.y - 0.3, 0)
 
     if (world.current) {
