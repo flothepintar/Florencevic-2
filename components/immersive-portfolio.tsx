@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import Image from 'next/image'
 import { ArrowDown, ArrowUpRight, X } from 'lucide-react'
 import { LazyPortfolioWorld } from '@/components/three/lazy-portfolio-world'
 import { experience } from '@/data/experience'
@@ -20,6 +21,14 @@ const chapters = [
 ]
 
 const systemFilters = ['Commerce', 'Inventory', 'Intelligence', 'Mobile', 'Agents']
+
+const operationalUniverseNodes = [
+  { projectId: 'omni-channel-manager', x: '50%', y: '18%', tone: 'cyan' },
+  { projectId: 'warehouse-sync', x: '20%', y: '36%', tone: 'lime' },
+  { projectId: 'fulfillment-engine', x: '80%', y: '36%', tone: 'cyan' },
+  { projectId: 'inbound-ledger', x: '20%', y: '78%', tone: 'cyan' },
+  { projectId: 'negative-stock-guard', x: '80%', y: '78%', tone: 'violet' },
+] as const
 
 export function ImmersivePortfolio() {
   const rootRef = useRef<HTMLDivElement>(null)
@@ -180,6 +189,55 @@ export function ImmersivePortfolio() {
 
       <main className="journey-main">
         <section id="origin" className="journey-scene journey-origin" data-scene>
+          <div
+            className="origin-universe"
+            role="group"
+            aria-label="Interactive operational universe"
+          >
+            <div className="origin-universe-media" aria-hidden="true">
+              <Image
+                src="/og-operational-systems.png"
+                alt=""
+                fill
+                priority
+                sizes="(max-width: 640px) 118vw, (max-width: 1200px) 82vw, 1248px"
+              />
+            </div>
+            <p className="origin-universe-instruction">
+              <span>Select a live node</span>
+              <small>Tap to inspect the system</small>
+            </p>
+            {operationalUniverseNodes.map((node) => {
+              const project = featuredProjects.find((item) => item.id === node.projectId)
+              if (!project) return null
+
+              return (
+                <button
+                  className="universe-node"
+                  data-tone={node.tone}
+                  type="button"
+                  key={node.projectId}
+                  style={
+                    {
+                      '--node-x': node.x,
+                      '--node-y': node.y,
+                    } as React.CSSProperties
+                  }
+                  aria-label={`Open ${project.name} case study`}
+                  onClick={(event) => {
+                    caseStudyTriggerRef.current = event.currentTarget
+                    setSelectedProjectId(project.id)
+                  }}
+                >
+                  <span className="universe-node-core" aria-hidden="true" />
+                  <span className="universe-node-label">
+                    <small>{project.code}</small>
+                    <strong>{project.name}</strong>
+                  </span>
+                </button>
+              )
+            })}
+          </div>
           <div className="origin-intro">
             <span>Interactive systems portfolio · Bali, Indonesia</span>
             <p>{site.role}</p>
