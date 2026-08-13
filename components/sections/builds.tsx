@@ -6,7 +6,7 @@ import { projects, type Project } from '@/data/projects'
 import { Reveal } from '@/components/ui/reveal'
 import { SectionHeading } from '@/components/ui/section-heading'
 import { TiltCard } from '@/components/ui/tilt-card'
-import { ProjectModal } from './project-modal'
+import { ProjectModal } from '@/components/ui/project-modal'
 import { cn } from '@/lib/utils'
 
 export function Builds() {

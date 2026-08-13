@@ -1,6 +1,6 @@
 'use client'
 
-import { Mail, MessageCircle, Instagram } from 'lucide-react'
+import { Camera, Mail, MessageCircle } from 'lucide-react'
 import { Reveal } from '@/components/ui/reveal'
 import { MagneticButton } from '@/components/ui/magnetic-button'
 import { site } from '@/data/site'
@@ -47,7 +47,7 @@ export function Contact() {
               Email Me
             </MagneticButton>
             <MagneticButton href={site.links.instagram} variant="ghost">
-              <Instagram className="h-4 w-4" />
+              <Camera className="h-4 w-4" />
               @yoflorencevic
             </MagneticButton>
           </div>
